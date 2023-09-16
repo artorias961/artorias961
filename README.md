@@ -1,34 +1,35 @@
-<h1 align="center">Hi 👋, I'm Christopher Morales</h1>
-<h3 align="center">A passionate Electrical Engineer from Los Angeles</h3>
-
-- 🔭 I’m currently working on **Robotics Dog**
+<!-- CREDIT goes to: https://github.com/ClaraCrazy, got inspired by her page -->
 
 
-<!-- Who I am -->
-<h3 align="center">Just another tech enthusiast, prioritizing privacy and staying curious</h3>
-
-<!-- Creating a divider -->
+<!-- Creating a divider for my introduction (steam/discord logos as well) -->
 <div align="center">
-
   <!-- Creating the Discord logo and link -->
   <a href="[https://discord.gg/wUW9U72v3b]" target="_blank">
     <!-- Creating the logo of discord -->
     <img src="https://img.shields.io/badge/Discord-5865F2?style=for-the-badge&logo=discord&logoColor=white" style="margin-bottom: 5px;"/>
   </a>
 
+
+
   <!-- Creating the Steam logo and link -->
   <a href="https://steamcommunity.com/id/artorias961" target="_blank">
     <!-- Creating the logo of Steam -->
     <img src="https://img.shields.io/badge/Steam-171A21?style=for-the-badge&logo=steam&logoColor=white" style="margin-bottom: 5px;"/>
   </a>
-
 </div align="center">
 
 
+<!-- Creaking Element -->
+<br>
 
+<!--  -->
 
-
-
+## :notes: About me
+<!-- Creating a divider -->
+<div>
+  <img align="left" height="260vh" src="[[https://user-images.githubusercontent.com/55334727/232866686-aec8bc11-14a3-4499-9072-9ea96e6e3db6.gif](https://www.google.com/url?sa=i&url=https%3A%2F%2Fanimesher.com%2Fentry%2Fgif-ghost-in-the-shell-coding-2045678%2F&psig=AOvVaw1jadG_yes2oyEEg4bu13VF&ust=1694993629738000&source=images&cd=vfe&opi=89978449&ved=0CA8QjRxqFwoTCLDni7ulsIEDFQAAAAAdAAAAABAh)](https://animesher.com/orig/2/204/2045/20456/animesher.com_gif-ghost-in-the-shell-coding-2045678.gif)">
+  <img align="left" height="260vh" src="https://upload.wikimedia.org/wikipedia/commons/3/3d/1_120_transparent.png">
+</div>
 
 
 
