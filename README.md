@@ -34,6 +34,23 @@
 <!-- About me -->
 - I'm currently learning Python and C
 - I'm currently working on a Robotics Dog at CSULA
+- I enjoy working on:
+&nbsp; ∘ &nbsp; Anything related to Bluetooth Low Energy
+&nbsp; ∘ &nbsp; Machine Learning
+&nbsp; ∘ &nbsp; Messing with Raspberry Pi & PYNQ Z2
+
+## What I use 
+
+
+
+| DevOps | ello | |
+| Backend | <img style="margin: 10px" src="https://profilinator.rishav.dev/skills-assets/linux-original.svg" alt="Linux" height="50" /> <img style="margin: 10px" src="https://profilinator.rishav.dev/skills-assets/git-scm-icon.svg" alt="Git" height="50" /> <img style="margin: 10px" src="https://profilinator.rishav.dev/skills-assets/gnu_bash-icon.svg" alt="Bash" height="50" /> <img style="margin: 10px" src="https://upload.wikimedia.org/wikipedia/de/thumb/c/cb/Raspberry_Pi_Logo.svg/570px-Raspberry_Pi_Logo.svg.png" alt="Raspberry Pi" height="50" /> <img style="margin: 10px" src="https://profilinator.rishav.dev/skills-assets/docker-original-wordmark.svg" alt="Docker" height="50" /> | |
+
+
+
+
+
+
 
 <h3 align="left">Connect with me:</h3>
 <p align="left">
