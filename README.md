@@ -31,8 +31,9 @@
   <img align="left" height="260vh" src="https://upload.wikimedia.org/wikipedia/commons/3/3d/1_120_transparent.png">
 </div>
 
-
-
+<!-- About me -->
+- I'm currently learning Python and C
+- I'm currently working on a Robotics Dog at CSULA
 
 <h3 align="left">Connect with me:</h3>
 <p align="left">
