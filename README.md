@@ -35,9 +35,10 @@
 - I'm currently learning Python and C
 - I'm currently working on a Robotics Dog at CSULA
 - I enjoy working on:
-&nbsp; ∘ &nbsp; Anything related to Bluetooth Low Energy
-&nbsp; ∘ &nbsp; Machine Learning
-&nbsp; ∘ &nbsp; Messing with Raspberry Pi & PYNQ Z2
+   - Anything related to Bluetooth Low Energy
+   - Machine Learning
+   - Messing with Raspberry Pi & PYNQ Z2
+- I love learning !!!
 
 ## What I use 
 
