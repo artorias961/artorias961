@@ -2,21 +2,25 @@
 
 
 <!-- Creating a divider for my introduction (steam/discord logos as well) -->
-<div align="center">
+
+
+
+
+<!-- <div align="center"> -->
   <!-- Creating the Discord logo and link -->
-  <a href="https://discord.gg/wUW9U72v3b" target="_blank">
+ <!-- <a href="https://discord.gg/wUW9U72v3b" target="_blank"> -->
     <!-- Creating the logo of discord -->
-    <img src="https://img.shields.io/badge/Discord-5865F2?style=for-the-badge&logo=discord&logoColor=white" style="margin-bottom: 5px;"/>
-  </a>
+    <!-- <img src="https://img.shields.io/badge/Discord-5865F2?style=for-the-badge&logo=discord&logoColor=white" style="margin-bottom: 5px;"/> -->
+ <!-- </a> -->
 
 
 
   <!-- Creating the Steam logo and link -->
-  <a href="https://steamcommunity.com/id/artorias961" target="_blank">
+ <!--  <a href="https://steamcommunity.com/id/artorias961" target="_blank"> -->
     <!-- Creating the logo of Steam -->
-    <img src="https://img.shields.io/badge/Steam-171A21?style=for-the-badge&logo=steam&logoColor=white" style="margin-bottom: 5px;"/>
-  </a>
-</div align="center">
+<!--    <img src="https://img.shields.io/badge/Steam-171A21?style=for-the-badge&logo=steam&logoColor=white" style="margin-bottom: 5px;"/> -->
+<!--  </a> -->
+<!-- </div align="center"> -->
 
 
 <!-- Creaking Element -->
