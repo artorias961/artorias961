@@ -29,7 +29,9 @@
    - Machine Learning
    - Messing with Raspberry Pi & PYNQ Z2
 - Defeated by ROS2 but starting to conquer ROS1
-- I love learning !!!
+- Ingredients you'll need:
+   - Passion
+   - Humility
 
 ## What I use 
 
