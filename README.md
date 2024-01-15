@@ -42,6 +42,7 @@
 
 ## What I use 
 
+
 <!-- Creating a table chart -->
 | Software Languages | <img style="margin: 10px" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/c/c-original.svg" alt="c" width="50" height="50"/> <img style="margin: 10px" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/cplusplus/cplusplus-original.svg" alt="cplusplus" width="50" height="50"/> <img style="margin: 10px" src="https://www.vectorlogo.zone/logos/pytorch/pytorch-icon.svg" alt="pytorch" width="50" height="50"/> <img style="margin: 10px" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg" alt="python" width="50" height="50"/> | What I use for school |
 | :---: | :---: | :---: |
@@ -53,11 +54,16 @@
 
 
 
+## 📊 GitHub Stats
 
+<!-- reference 1: https://github.com/anuraghazra/github-readme-stats -->
+<!-- reference 2: https://github-readme-streak-stats.herokuapp.com/demo/ -->
 
-
-
-
+<p align="center">
+ <img src="https://github-readme-stats.vercel.app/api?username=artorias961&show_icons=true&theme=tokyonight" width="35%">
+ <img src="https://github-readme-streak-stats.herokuapp.com/?user=artorias961&theme=tokyonight&hide_border=false" width="37%">
+ <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=artorias961&theme=tokyonight&hide_border=false&include_all_commits=false&count_private=true&layout=compact" width="27%">
+</p>
 
 
 
