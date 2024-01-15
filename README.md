@@ -1,6 +1,11 @@
 <!-- CREDIT goes to: https://github.com/ClaraCrazy, got inspired by her page -->
 
 
+<h3 align="center">
+"Don't let the what-if's, maybe's and if-only's distract you. The one thing that you chose yourself, THAT is the truth of your universe." - Kamina
+</h3>
+
+
 <!-- Creating a divider for my introduction (steam/discord logos as well) -->
 <div align="center">
  <a href="https://discord.gg/PvAchTvgZC" target="_blank">
@@ -34,8 +39,9 @@
 - I enjoy working on:
    - Anything related to Bluetooth Low Energy
    - Machine Learning
-   - Messing with Raspberry Pi & PYNQ Z2
+   - DIY Raspberry Pi Projects
 - Defeated by ROS2 but starting to conquer ROS1
+- I'm daily-driving [Tumbleweed OS](https://get.opensuse.org/tumbleweed/)
 - Ingredients you'll need:
    - Passion
    - Humility
