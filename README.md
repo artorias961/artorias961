@@ -37,12 +37,13 @@
 
 - I'm **Christopher**, an EE Graduate Student at Cal State LA.
 - I'm currently learning Python and C
-- I'm currently working on a Robotics Dog at CSULA
 - I enjoy working on:
    - Anything related to Bluetooth Low Energy
    - Machine Learning
+   - Love robotics-related projects
    - DIY Raspberry Pi Projects
 - Defeated by ROS2 but starting to conquer ROS1
+- Starting to like ZephyrRTOS
 - I'm daily-driving [Tumbleweed OS](https://get.opensuse.org/tumbleweed/)
 - Ingredients you'll need:
    - Passion
