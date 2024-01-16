@@ -34,6 +34,8 @@
 </div>
 
 <!-- About me -->
+
+- I'm **Christopher**, an EE Graduate Student at Cal State LA.
 - I'm currently learning Python and C
 - I'm currently working on a Robotics Dog at CSULA
 - I enjoy working on:
