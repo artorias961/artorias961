@@ -16,8 +16,9 @@
   <a href="https://steamcommunity.com/id/artorias961/" target="_blank">
     <img src="https://img.shields.io/badge/Steam-171A21?style=for-the-badge&logo=steam&logoColor=white" style="margin-bottom: 5px;"/>
   </a>
+  -->
 </div>
--->
+
 <!-- Creating a loading bar -->
 <div align="center">  
   <img style="margin: 10px" src="https://cdn.discordapp.com/attachments/1085349080592560169/1097954019248451635/ezgif.com-gif-maker_1.gif" height="25" />  
