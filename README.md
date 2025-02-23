@@ -2,7 +2,7 @@
 
 
 <h3 align="center">
-"Don't let the what-if's, maybe's and if-only's distract you. The one thing that you chose yourself, THAT is the truth of your universe." - Kamina
+"20 years from now you will be more disappointed by the things that you didn’t do than by the ones you did do. So, throw off the bowlines. Sail away from the safe harbor. Catch the trade winds in your sails. Explore. Dream. Discover." - Minecraft
 </h3>
 
 
