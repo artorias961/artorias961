@@ -51,6 +51,18 @@
 - Ingredients you'll need:
    - Passion
    - Humility
+ 
+## 💻My Rig
+- CPU: Intel Ultra 7 265K
+- RAM: 64GB DDR5
+- GPU: GIGABYTE 5080 RTX
+- STORAGE:
+   - 1TB Samsung SSD 860 EVO
+   - 1TB WD NVMe Blue SN580 
+- MOTHERBOARD: ProArt Z890-CREATOR WIFI
+- POWER SUPPLY: Corsair rm1000x
+- CPU FAN: Noctua NH-D15
+- CASE: Fractal North Charcoal Black Tempered Glass Dark
 
 ## What I use 
 
