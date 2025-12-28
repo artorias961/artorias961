@@ -159,7 +159,7 @@ This pattern (image + spacer) tends to behave best across clients.
 
  <img src="https://github-readme-stats-fast.vercel.app/api?username=artorias961&show_icons=true&theme=tokyonight" width="35%">
 
- <img src="https://github-readme-streak-stats.herokuapp.com/?user=artorias961&theme=tokyonight&hide_border=false" width="37%">
+<img src="https://github-readme-stats-fast.vercel.app/api/streak?username=artorias961&theme=tokyonight&hide_border=false" width="37%">
  
  <img src="https://github-readme-stats-fast.vercel.app/api/top-langs/?username=artorias961&theme=tokyonight&hide_border=false&include_all_commits=false&count_private=true&layout=compact" width="27%">
 
