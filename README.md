@@ -119,7 +119,7 @@ This pattern (image + spacer) tends to behave best across clients.
   - Docker
   - Raspberry Pi / Arduino
   - MATLAB
-  - Django, Redis
+  - React, Redis
 
 </details>
 
