@@ -51,6 +51,15 @@ PALETTE_ROW_2 = ["#414868", "#ff899d", "#9fe044", "#faba4a", "#8db0ff", "#c7a9ff
 
 USER, HOST = "artorias961", "workstation"
 
+# typing animation (seconds)
+START = 0.6        # first keystroke
+TYPE_S = 0.055     # per character (long commands are sped up to fit MAX_TYPE)
+MAX_TYPE = 1.6
+PAUSE = 0.35       # after the command, before output appears
+LINE_S = 0.07      # between output lines
+ROW_S = 0.04       # between rows of the fetch cards (art + info print together)
+GAP = 0.45         # before the next prompt
+
 # ────────────────────────────── CONTENT ──────────────────────────────
 # A line is a list of segments. A segment is a plain string (default
 # colour) or a (text, "classes") tuple. Classes: colour keys from COLORS
@@ -242,12 +251,55 @@ class Card:
             + f'<animate attributeName="opacity" values="1;0" calcMode="discrete" dur="1.1s" '
               f'begin="{begin:.2f}s" repeatCount="indefinite"/></rect>')
 
-    def palette(self, col, row):
+    @staticmethod
+    def appear(t):
+        """attrs + inner for an element that is hidden until t seconds (None = always visible)."""
+        if t is None:
+            return "", ""
+        return ' opacity="0"', f'<set attributeName="opacity" to="1" begin="{t:.2f}s" fill="freeze"/>'
+
+    def typed(self, row, cmd, t, first=False):
+        """Prompt + a command typed one key at a time. Returns when the output should start."""
+        attrs, inner = self.appear(None if first else max(t - 0.15, 0))
+        plen = self.prompt(row, attrs=attrs, inner=inner)
+        n = len(cmd)
+        dur = min(n * TYPE_S, MAX_TYPE)
+        cid = f"type{len(self.defs)}"
+        widths = ";".join(f"{k * CW:.2f}" for k in range(n + 1))
+        self.defs.append(
+            f'<clipPath id="{cid}"><rect x="{self.x(plen):.2f}" y="{self.row_top(row):.2f}" width="0" '
+            f'height="{LH:.2f}"><animate attributeName="width" values="{widths}" calcMode="discrete" '
+            f'begin="{t:.2f}s" dur="{dur:.2f}s" fill="freeze"/></rect></clipPath>')
+        first_word, _, rest = cmd.partition(" ")
+        self.text(plen, row, [(first_word, "c B"), (" " + rest if rest else "", "fg")],
+                  f' clip-path="url(#{cid})"')
+        # block cursor that follows the typing, then disappears
+        xs = ";".join(f"{self.x(plen + k):.2f}" for k in range(n + 1))
+        end = t + dur + PAUSE
+        self.body.append(
+            f'<rect x="{self.x(plen):.2f}" y="{self.row_top(row) + 1:.2f}" width="{CW:.2f}" '
+            f'height="{LH - 2:.2f}" fill="{COLORS["fg"]}" opacity="0">'
+            f'<set attributeName="opacity" to="1" begin="{max(t - 0.15, 0):.2f}s" fill="freeze"/>'
+            f'<animate attributeName="x" values="{xs}" calcMode="discrete" begin="{t:.2f}s" '
+            f'dur="{dur:.2f}s" fill="freeze"/>'
+            f'<set attributeName="opacity" to="0" begin="{end:.2f}s" fill="freeze"/></rect>')
+        return end
+
+    def end_prompt(self, row, t):
+        """Final prompt with a blinking cursor, shown at t."""
+        attrs, inner = self.appear(max(t - 0.15, 0))
+        plen = self.prompt(row, attrs=attrs, inner=inner)
+        self.cursor(plen, row, begin=t)
+
+    def palette(self, col, row, at=None):
+        attrs, inner = self.appear(at)
+        self.body.append(f"<g{attrs}>{inner}")
         for r, colours in enumerate((PALETTE_ROW_1, PALETTE_ROW_2)):
             for i, c in enumerate(colours):
                 self.body.append(
-                    f'<rect x="{self.x(col + i * 3):.2f}" y="{self.row_top(row + r):.2f}" '
+                    f'  <rect x="{self.x(col + i * 3):.2f}" y="{self.row_top(row + r):.2f}" '
                     f'width="{3 * CW:.2f}" height="{LH:.2f}" fill="{c}"/>')
+        self.body.append("</g>")
         self.rows = max(self.rows, row + 2)
 
     def comment(self, note: str):
@@ -337,47 +389,46 @@ def _font_css(chars: set[str]) -> str:
 def build_hero() -> str:
     card = Card(f"{USER}@{HOST}: ~", "Terminal: whoami — Christopher Morales, an engineer building at the "
                                      "intersection of hardware and software.")
-    type_s, pause, line_s, gap = 0.055, 0.35, 0.07, 0.45
-    t, row = 0.6, 0
+    t, row = START, 0
     for i, (cmd, out) in enumerate(HERO):
         card.comment(f"$ {cmd}  (the <set> tags make lines appear in order)")
-        shown = "" if i == 0 else f' opacity="0"'
-        reveal = "" if i == 0 else f'<set attributeName="opacity" to="1" begin="{t - 0.15:.2f}s" fill="freeze"/>'
-        plen = card.prompt(row, attrs=shown, inner=reveal)
-        # typed command: clip a full-width text with a growing rect
-        n = len(cmd)
-        dur = n * type_s
-        widths = ";".join(f"{k * CW:.2f}" for k in range(n + 1))
-        cid = f"type{i}"
-        card.defs.append(
-            f'<clipPath id="{cid}"><rect x="{card.x(plen):.2f}" y="{card.row_top(row):.2f}" width="0" '
-            f'height="{LH:.2f}"><animate attributeName="width" values="{widths}" calcMode="discrete" '
-            f'begin="{t:.2f}s" dur="{dur:.2f}s" fill="freeze"/></rect></clipPath>')
-        first, _, rest = cmd.partition(" ")
-        card.text(plen, row, [(first, "c B"), (" " + rest if rest else "", "fg")], f' clip-path="url(#{cid})"')
-        # cursor that follows the typing, then disappears
-        xs = ";".join(f"{card.x(plen + k):.2f}" for k in range(n + 1))
-        end = t + dur + pause
-        card.body.append(
-            f'<rect x="{card.x(plen):.2f}" y="{card.row_top(row) + 1:.2f}" width="{CW:.2f}" '
-            f'height="{LH - 2:.2f}" fill="{COLORS["fg"]}" opacity="0">'
-            f'<set attributeName="opacity" to="1" begin="{max(t - 0.15, 0):.2f}s" fill="freeze"/>'
-            f'<animate attributeName="x" values="{xs}" calcMode="discrete" begin="{t:.2f}s" '
-            f'dur="{dur:.2f}s" fill="freeze"/>'
-            f'<set attributeName="opacity" to="0" begin="{end:.2f}s" fill="freeze"/></rect>')
+        t = card.typed(row, cmd, t, first=(i == 0))
         row += 1
-        t = end
         for line in out:
-            card.text(0, row, line, ' opacity="0"',
-                      f'<set attributeName="opacity" to="1" begin="{t:.2f}s" fill="freeze"/>')
+            card.text(0, row, line, *card.appear(t))
             row += 1
-            t += line_s
+            t += LINE_S
         row += 1  # breathing room between commands
-        t += gap
+        t += GAP
     card.comment("final prompt + blinking cursor")
-    plen = card.prompt(row, attrs=' opacity="0"',
-                       inner=f'<set attributeName="opacity" to="1" begin="{t - 0.15:.2f}s" fill="freeze"/>')
-    card.cursor(plen, row, begin=t)
+    card.end_prompt(row, t)
+    return card.svg()
+
+
+def _fetch_card(card, cmd, art, art_col, info, gap, cursor=None):
+    """onefetch / neofetch layout: art on the left, info on the right, printed row by row."""
+    card.comment(f"$ {cmd}")
+    t = card.typed(0, cmd, START, first=True)
+    when = lambda r: t + r * ROW_S  # noqa: E731  (row r of the output appears at this time)
+    card.comment("logo: ASCII art")
+    for r, segs in enumerate(art):
+        card.text(art_col, 2 + r, segs, *card.appear(when(r)))
+    if cursor:
+        r, c = cursor
+        card.comment("blinking cursor inside the logo")
+        card.text(art_col + c, 2 + r, [("_", "fg B")], ' opacity="0"',
+                  f'<animate attributeName="opacity" values="1;0" calcMode="discrete" '
+                  f'dur="1.1s" begin="{when(r):.2f}s" repeatCount="indefinite"/>')
+    card.comment("info column")
+    info_col = art_col + max(sum(len(t) for t, _ in _norm(s)) for s in art) + gap
+    for r, segs in enumerate(info):
+        card.text(info_col, 2 + r, segs, *card.appear(when(r)))
+    card.comment("colour palette")
+    pr = len(info) + 1
+    card.palette(info_col, 2 + pr, at=when(pr))
+    rows = max(len(art), len(info) + 3)
+    card.comment("prompt + blinking cursor")
+    card.end_prompt(2 + rows + 1, when(rows) + GAP)
     return card.svg()
 
 
@@ -386,87 +437,56 @@ def build_onefetch() -> str:
                 "onefetch-style card: Christopher Morales. Interests: embedded systems, BLE, wireless, robotics. "
                 "Learning C/C++, Zephyr RTOS, ROS and Linux. Languages: Python, C, C++, Bash. "
                 "Portfolio: christopher-morales.vercel.app")
-    card.comment("command")
-    card.prompt(0, f"onefetch ~/{USER}")
-    (art, cursor), info = _chip_art(), _onefetch_info()
-    card.comment("logo: chip ASCII art (coffee cup + Python prompt)")
-    for r, segs in enumerate(art):
-        card.text(1, 2 + r, segs)
-    if cursor:
-        card.comment("blinking cursor inside the cup")
-        card.text(1 + cursor[1], 2 + cursor[0], [("_", "fg B")],
-                  inner='<animate attributeName="opacity" values="1;0" calcMode="discrete" '
-                        'dur="1.1s" repeatCount="indefinite"/>')
-    card.comment("info column")
-    info_col = 1 + max(sum(len(t) for t, _ in _norm(s)) for s in art) + 4
-    for r, segs in enumerate(info):
-        card.text(info_col, 2 + r, segs)
-    last = 2 + max(len(art), len(info) + 3)
-    card.comment("colour palette")
-    card.palette(info_col, 2 + len(info) + 1)
-    card.comment("prompt + blinking cursor")
-    plen = card.prompt(last + 1)
-    card.cursor(plen, last + 1)
-    return card.svg()
+    art, cursor = _chip_art()
+    return _fetch_card(card, f"onefetch ~/{USER}", art, 1, _onefetch_info(), 4, cursor)
 
 
 def build_neofetch() -> str:
     card = Card(f"{USER}@{HOST}: ~ — neofetch",
                 "neofetch-style workstation specs: Linux, Intel Core Ultra 7 265K, GIGABYTE GeForce RTX 5080, "
                 "64GB DDR5, ProArt Z890-CREATOR WIFI, Corsair RM1000x, Noctua NH-D15, Fractal North case.")
-    card.comment("command")
-    card.prompt(0, "neofetch")
-    art, info = _tower_art(), _neofetch_info()
-    card.comment("logo: PC tower ASCII art")
-    for r, segs in enumerate(art):
-        card.text(2, 2 + r, segs)
-    card.comment("info column")
-    info_col = 2 + max(sum(len(t) for t, _ in _norm(s)) for s in art) + 5
-    for r, segs in enumerate(info):
-        card.text(info_col, 2 + r, segs)
-    card.comment("colour palette")
-    card.palette(info_col, 2 + len(info) + 1)
-    last = 2 + max(len(art), len(info) + 3)
-    card.comment("prompt + blinking cursor")
-    plen = card.prompt(last + 1)
-    card.cursor(plen, last + 1)
-    return card.svg()
+    return _fetch_card(card, "neofetch", _tower_art(), 2, _neofetch_info(), 5)
 
 
 def build_stack() -> str:
     card = Card(f"{USER}@{HOST}: ~ — tree",
                 "Tools and tech: embedded (C, C++, Arduino), scripting (Python, Bash), "
                 "systems (Linux, Docker, Git), hardware/DIY (Raspberry Pi).")
-    card.comment("command + output")
-    card.prompt(0, "tree ~/stack")
-    card.text(0, 1, [(f"/home/{USER}/stack", "b B")])
+    card.comment("$ tree ~/stack")
+    t = card.typed(0, "tree ~/stack", START, first=True)
+    card.text(0, 1, [(f"/home/{USER}/stack", "b B")], *card.appear(t))
     dw = max(len(d) for d, _, _ in STACK) + 3
     tw = max(len(t) for _, t, _ in STACK) + 3
     for i, (d, tools, why) in enumerate(STACK):
+        t += LINE_S
         branch = "└── " if i == len(STACK) - 1 else "├── "
-        card.text(0, 2 + i, [(branch, "dim"), (d.ljust(dw), "b B"), (tools.ljust(tw), "y"), ("# " + why, "dim")])
+        card.text(0, 2 + i, [(branch, "dim"), (d.ljust(dw), "b B"), (tools.ljust(tw), "y"), ("# " + why, "dim")],
+                  *card.appear(t))
     files = sum(len(t.split(" · ")) for _, t, _ in STACK)
-    card.text(0, 3 + len(STACK), [f"{len(STACK)} directories, {files} files"])
-    row = 5 + len(STACK)
+    t += LINE_S
+    card.text(0, 3 + len(STACK), [f"{len(STACK)} directories, {files} files"], *card.appear(t))
     card.comment("prompt + blinking cursor")
-    plen = card.prompt(row)
-    card.cursor(plen, row)
+    card.end_prompt(5 + len(STACK), t + GAP)
     return card.svg()
 
 
 def build_stats() -> str:
     card = Card(f"{USER}@{HOST}: ~ — stats", "Terminal: fetching GitHub stats for artorias961")
-    card.prompt(0, f"./github-stats --user {USER} --theme tokyonight")
-    card.text(0, 1, [("fetching stats, streak and top languages… ", "dim"), ("done ✓", "g B")])
+    card.comment("$ ./github-stats")
+    t = card.typed(0, f"./github-stats --user {USER} --theme tokyonight", START, first=True)
+    msg = "fetching stats, streak and top languages… "
+    card.text(0, 1, [(msg, "dim")], *card.appear(t))
+    card.text(len(msg), 1, [("done ✓", "g B")], *card.appear(t + 0.9))
     return card.svg()
 
 
 def build_exit() -> str:
     card = Card(f"{USER}@{HOST}: ~", "Terminal: exit — thanks for stopping by, see you in the next build.")
-    card.prompt(0, "exit")
-    card.text(0, 1, [("logout", "sub")])
+    card.comment("$ exit")
+    t = card.typed(0, "exit", START, first=True)
+    card.text(0, 1, [("logout", "sub")], *card.appear(t))
     card.text(0, 2, [(f"Connection to {USER} closed. ", "sub"),
-                     ("Thanks for stopping by — see you in the next build.", "m")])
+                     ("Thanks for stopping by — see you in the next build.", "m")], *card.appear(t + 0.3))
     return card.svg()
 
 
