@@ -24,11 +24,7 @@
 
 <img src="https://raw.githubusercontent.com/artorias961/artorias961/main/assets/neofetch.svg?v=4" width="100%" alt="neofetch-style workstation specs. OS: Linux (daily driver). Case: Fractal North Charcoal Black. Board: ProArt Z890-CREATOR WIFI. CPU: Intel Core Ultra 7 265K. GPU: GIGABYTE GeForce RTX 5080. Memory: 64GB DDR5. Disks: 1TB WD Blue SN580 NVMe, 1TB Samsung SSD 860 EVO. PSU: Corsair RM1000x. Cooler: Noctua NH-D15. Tools: bash, git, docker, MATLAB, Raspberry Pi, Arduino, React, Redis.">
 
-<details>
-<summary><code>$ xdg-open ~/pictures/workstation.gif</code></summary>
-<br>
-<img src="https://github.com/user-attachments/assets/748982fe-7df8-4c48-9859-928e030f7fcf" width="100%" alt="My workstation">
-</details>
+
 
 <br>
 
