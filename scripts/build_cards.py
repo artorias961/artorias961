@@ -72,53 +72,47 @@ HERO = [
     ]),
 ]
 
-# 961 in a rounded half-block font, sitting on a QFP chip
-_DIGITS = [
-    "▄▀▀▀▄  ▄▀▀▀▄  ▄█ ",
-    "█   █  █       █ ",
-    " ▀▀▀█  █▀▀▀▄   █ ",
-    "    █  █   █   █ ",
-    " ▄▄▄▀  ▀▄▄▄▀  ▄█▄",
+# Chip logo: a coffee cup with a Python prompt, sitting on a QFP chip.
+# Each row is (text, mask). Mask letters pick the colour of the character
+# above them: s = steam, c = cup, p = prompt, _ = blinking cursor.
+_LOGO = [
+    ("  ▀▄ ▀▄ ▀▄   ", "  ss ss ss   "),
+    ("▄▄▄▄▄▄▄▄▄▄▄  ", "ccccccccccc  "),
+    ("█         █▀▄", "c         ccc"),
+    ("█  >>> _  █▄▀", "c  ppp _  ccc"),
+    ("▀▄▄▄▄▄▄▄▄▄▀  ", "ccccccccccc  "),
 ]
+LOGO_LABEL = "CHRISTOPHER MORALES"
+_MASK_CLASS = {" ": "fg", "s": "mute", "c": "m B", "p": "g B", "l": "c", "y": "y", "_": "fg"}
 
 
 def _chip_art():
+    """Returns (art rows, (row, col) of the blinking cursor inside the art)."""
     inner = 23
     pins_top = "  " + " " + "".join(" ╷" for _ in range(11)) + "  "
     pins_bot = "  " + " " + "".join(" ╵" for _ in range(11)) + "  "
-    body = [
-        " ●".ljust(inner),
-        " " * inner,
-        *[(" " * 3 + d).ljust(inner) for d in _DIGITS],
-        " " * inner,
-        "A R T O R I A S".center(inner),
-        " " * inner,
-    ]
+    w = max(len(t) for t, _ in _LOGO)
+    pad = (inner - w) // 2
+    blank = (" " * inner, " " * inner)
+    label = LOGO_LABEL.center(inner)
+    body = [(" ●".ljust(inner), " y".ljust(inner)), blank]
+    body += [((" " * pad + t).ljust(inner), (" " * pad + m).ljust(inner)) for t, m in _LOGO]
+    body += [blank, (label, "".join("l" if ch != " " else " " for ch in label)), blank]
+
     art = [[(pins_top, "mute")],
            [("  ", ""), ("┌" + "─┴" * 11 + "─┐", "b")]]
-    for row in body:
+    cursor = None
+    for text, mask in body:
+        if "_" in mask:
+            cursor = (len(art), 3 + mask.index("_"))
+            text = text.replace("_", " ")
         segs = [("──", "mute"), ("┤", "b")]
-        for ch, cls in _runs(row, {"●": "y", **{c: "m B" for c in "▄▀█"}, **{c: "c" for c in "ARTOIS"}}):
-            segs.append((ch, cls))
+        segs += [(ch, _MASK_CLASS[m]) for ch, m in zip(text, mask)]
         segs += [("├", "b"), ("──", "mute")]
         art.append(segs)
     art += [[("  ", ""), ("└" + "─┬" * 11 + "─┘", "b")],
             [(pins_bot, "mute")]]
-    return art
-
-
-def _runs(text, colour_of):
-    """Split text into runs of equal colour."""
-    out, cur, cls = [], "", None
-    for ch in text:
-        c = colour_of.get(ch, "fg")
-        if c != cls and cur:
-            out.append((cur, cls))
-            cur = ""
-        cur, cls = cur + ch, c
-    if cur:
-        out.append((cur, cls))
-    return out
+    return art, cursor
 
 
 def _onefetch_info():
@@ -394,10 +388,15 @@ def build_onefetch() -> str:
                 "Portfolio: christopher-morales.vercel.app")
     card.comment("command")
     card.prompt(0, f"onefetch ~/{USER}")
-    art, info = _chip_art(), _onefetch_info()
-    card.comment("logo: chip ASCII art")
+    (art, cursor), info = _chip_art(), _onefetch_info()
+    card.comment("logo: chip ASCII art (coffee cup + Python prompt)")
     for r, segs in enumerate(art):
         card.text(1, 2 + r, segs)
+    if cursor:
+        card.comment("blinking cursor inside the cup")
+        card.text(1 + cursor[1], 2 + cursor[0], [("_", "fg B")],
+                  inner='<animate attributeName="opacity" values="1;0" calcMode="discrete" '
+                        'dur="1.1s" repeatCount="indefinite"/>')
     card.comment("info column")
     info_col = 1 + max(sum(len(t) for t, _ in _norm(s)) for s in art) + 4
     for r, segs in enumerate(info):
