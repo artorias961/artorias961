@@ -65,6 +65,18 @@ GAP = 0.45         # before the next prompt
 # colour) or a (text, "classes") tuple. Classes: colour keys from COLORS
 # plus "B" for bold.
 
+class Slow:
+    """An output line whose last characters appear one at a time (e.g. hesitant dots)."""
+    def __init__(self, segs, trail=".", count=3, every=0.45, cls=None):
+        self.segs, self.trail, self.count, self.every, self.cls = segs, trail, count, every, cls
+
+
+class Later:
+    """An output line that fades in after an extra pause."""
+    def __init__(self, segs, delay=1.0, fade=0.6):
+        self.segs, self.delay, self.fade = segs, delay, fade
+
+
 HERO = [
     ("whoami", [
         [("Christopher Morales", "m B"), ("  ·  ", "dim"), "Python, Coffee, and Keyboard enthusiast"],
@@ -77,7 +89,8 @@ HERO = [
         ["and a simple ", ("“why not?”", "g B"), "."],
     ]),
     ("echo $MOTTO", [
-        [("Just another engineer who likes building real things — one project at a time", "c")],
+        Slow([("In theory it’s straightforward", "c")], trail=".", count=3, every=0.45),
+        Later([("(it was not)", "mute")], delay=1.0),
     ]),
 ]
 
@@ -395,7 +408,21 @@ def build_hero() -> str:
         t = card.typed(row, cmd, t, first=(i == 0))
         row += 1
         for line in out:
-            card.text(0, row, line, *card.appear(t))
+            if isinstance(line, Slow):
+                card.text(0, row, line.segs, *card.appear(t))
+                col = sum(len(x) for x, _ in _norm(line.segs))
+                cls = line.cls or _norm(line.segs)[-1][1]
+                for k in range(line.count):  # each trailing character shows up a beat later
+                    t += line.every
+                    card.text(col + k, row, [(line.trail, cls)], *card.appear(t))
+            elif isinstance(line, Later):
+                t += line.delay
+                card.text(0, row, line.segs, ' opacity="0"',
+                          f'<animate attributeName="opacity" from="0" to="1" begin="{t:.2f}s" '
+                          f'dur="{line.fade:.2f}s" fill="freeze"/>')
+                t += line.fade
+            else:
+                card.text(0, row, line, *card.appear(t))
             row += 1
             t += LINE_S
         row += 1  # breathing room between commands
